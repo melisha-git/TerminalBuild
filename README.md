@@ -14,7 +14,13 @@ sudo apt install zsh -y
 snap install ghostty --classic
 ```
 
-3. Войти в ghostty
+3. Установить VSCode(optional)
+
+```shell
+sudo apt install vscode
+```
+
+4. Войти в ghostty
 
 ```shell
 ghostty
@@ -34,6 +40,7 @@ git clone https://github.com/melisha-git/TerminalBuild.git
 cd TerminalBuild
 chmod +x install.sh
 ./install.sh
+./vscode-tools-install.sh # optional
 ```
 
 ### Дополнительные команды
@@ -44,6 +51,7 @@ chmod +x install.sh
 cd TerminalBuild
 chmod +x install.sh
 ./install.sh
+./vscode-tools-uninstall.sh # optional
 ```
 
 ### Бинды ghostty
