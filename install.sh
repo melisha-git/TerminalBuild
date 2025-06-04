@@ -52,5 +52,21 @@ echo ""
 echo "📁 Копируем конфигурацию Ghostty..."
 cp ghostty_config "$HOME/.config/ghostty/config"
 
+sudo apt install eza -y -qq
+
+if ! grep -Fxq "alias ls=\"eza $eza_params\"" "$HOME/.zshrc"; then
+    echo "alias ls=\"eza $eza_params\"" >> "$HOME/.zshrc"
+    echo "alias l=\"eza --git-ignore $eza_params\"" >> "$HOME/.zshrc"
+    echo "alias ll=\"eza --all --header --long $eza_params\"" >> "$HOME/.zshrc"
+    echo "alias llm=\"eza --all --header --long --sort=modified $eza_params\"" >> "$HOME/.zshrc"
+    echo "alias la=\"eza -lbhHigUmuSa\"" >> "$HOME/.zshrc"
+    echo "alias lx=\"eza -lbhHigUmuSa@\"" >> "$HOME/.zshrc"
+    echo "alias lt=\"eza --tree $eza_params\"" >> "$HOME/.zshrc"
+    echo "alias tree=\"eza --tree $eza_params\"" >> "$HOME/.zshrc"
+    echo "ℹ✅  Строки с ls успешно добавлены"
+else
+    echo "ℹ️ Строки с ls уже присутствуют в ~/.zshrc"
+fi
+
 echo ""
 echo "✅ Установка завершена! Всё готово к работе 🎉"
