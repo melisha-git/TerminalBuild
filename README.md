@@ -39,6 +39,7 @@ cd TerminalBuild
 chmod +x install.sh
 ./install.sh
 ./vscode-tools-install.sh # (опционально)
+exec zsh #or source .zshrc
 ```
 ---
 
@@ -91,6 +92,8 @@ TerminalBuild/
 ## Автор
 
 [@melisha-git](https://github.com/melisha-git)
+[@/bin/notes](https://t.me/bin_notes)
+
 Pull Requests и Issues приветствуются!
 
 ---
