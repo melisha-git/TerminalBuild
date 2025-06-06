@@ -48,8 +48,8 @@ exec zsh #or source .zshrc
 Для удаления установленных компонентов:
 ```
 cd TerminalBuild
-chmod +x install.sh
-./install.sh
+chmod +x uninstall.sh
+./uninstall.sh
 ./vscode-tools-uninstall.sh # (опционально)
 ```
 ---
