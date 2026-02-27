@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  test-install:
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:24.04
+
+    steps:
+      - name: Install dependencies
+        run: |
+          apt update
+          apt install -y git
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run install script
+        run: |
+          chmod +x install.sh
+          yes | ./install.sh
