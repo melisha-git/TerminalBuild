@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  test-install:
+  test-install-uninstall:
     runs-on: ubuntu-latest
     container:
       image: ubuntu:24.04
@@ -26,3 +26,8 @@ jobs:
         run: |
           chmod +x install.sh
           yes | ./install.sh
+
+      - name: Run uninstall script
+        run: |
+          chmod +x uninstall.sh
+          yes | ./uninstall.sh
