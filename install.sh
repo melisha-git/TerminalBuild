@@ -196,6 +196,24 @@ else
 fi
 
 # =============================================
+# Inputrc (history search with arrow keys)
+# =============================================
+echo ""
+echo "⌨️  Inputrc..."
+
+if [ -f "$HOME/.inputrc" ] && grep -q 'history-search-backward' "$HOME/.inputrc"; then
+  echo "✅ History search bindings already configured."
+  mark_status "inputrc" "already installed"
+else
+  cat >> "$HOME/.inputrc" << 'EOF'
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+EOF
+  echo "✅ Arrow key history search added to ~/.inputrc"
+  mark_status "inputrc" "installed"
+fi
+
+# =============================================
 # Summary
 # =============================================
 echo ""
