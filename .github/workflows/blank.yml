@@ -8,10 +8,58 @@ on:
   workflow_dispatch:
 
 jobs:
-  test-install-uninstall:
+  ubuntu2004-install-uninstall:
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:20.04
+
+    steps:
+      - name: Install dependencies
+        run: |
+          apt update
+          apt install -y git
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run install script
+        run: |
+          chmod +x install.sh
+          yes | ./install.sh
+
+      - name: Run uninstall script
+        run: |
+          chmod +x uninstall.sh
+          yes | ./uninstall.sh
+
+  ubuntu2404-install-uninstall:
     runs-on: ubuntu-latest
     container:
       image: ubuntu:24.04
+
+    steps:
+      - name: Install dependencies
+        run: |
+          apt update
+          apt install -y git
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run install script
+        run: |
+          chmod +x install.sh
+          yes | ./install.sh
+
+      - name: Run uninstall script
+        run: |
+          chmod +x uninstall.sh
+          yes | ./uninstall.sh
+
+  ubuntu2504-install-uninstall:
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:25.04
 
     steps:
       - name: Install dependencies
