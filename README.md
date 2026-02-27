@@ -1,72 +1,57 @@
+<div align="center">
+
 # 🛠️ TerminalBuild
 
-TerminalBuild is a collection of scripts for quick terminal environment and Visual Studio Code setup. The scripts automatically install/remove useful utilities, configure convenient aliases, and make your terminal experience more comfortable.
+**Set up a beautiful Ubuntu/Debian terminal in under 2 minutes.**
+
+[![Shell](https://img.shields.io/badge/Shell-Bash%2FZsh-4EAA25?style=flat-square&logo=gnubash&logoColor=white)](#)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
+[![Last Commit](https://img.shields.io/github/last-commit/melisha-git/TerminalBuild?style=flat-square)](https://github.com/melisha-git/TerminalBuild/commits/main)
+[![GitHub Stars](https://img.shields.io/github/stars/melisha-git/TerminalBuild?style=flat-square)](https://github.com/melisha-git/TerminalBuild/stargazers)
+
+One script. Zsh + Oh My Zsh + Powerlevel10k + fzf + eza + 30 VS Code extensions.  
+No manual config. Everything is interactive — skip what you don't need.
+
+<!-- 
+🔥 TODO: Add a GIF/screenshot here! Record your terminal with `asciinema` or `vhs`:
+![demo](assets/demo.gif)
+-->
+
+</div>
 
 ---
 
-## Prerequisites
+## ⚡ Quick Start
 
-Before installation, make sure you have the following:
-
-1. Update packages and install git:
 ```bash
-sudo apt update
-sudo apt install git -y
+git clone https://github.com/melisha-git/TerminalBuild.git && cd TerminalBuild && chmod +x install.sh && ./install.sh
 ```
 
-2. (Optional) Install Visual Studio Code:
-```bash
-sudo apt install code
-```
-
-> **Note:** If you're running as root, VS Code commands require `--no-sandbox` flag. The scripts handle this automatically.
+That's it. The script will guide you through each component interactively.
 
 ---
 
-## ⚙️ Installation
+## 📦 What Gets Installed
 
-1. Clone the repository:
-```bash
-git clone https://github.com/melisha-git/TerminalBuild.git
-```
+| Component | What it does |
+|-----------|-------------|
+| **Oh My Zsh** | Zsh framework with plugins and themes |
+| **Powerlevel10k** | Fast, beautiful Zsh prompt |
+| **fzf** | Fuzzy finder for files, history, and more |
+| **eza** | Modern `ls` replacement with icons and git info |
+| **VS Code Extensions** | 30+ extensions for Python, C++, Docker, Remote SSH, etc. |
 
-2. Run the setup:
-```bash
-cd TerminalBuild
-chmod +x install.sh vscode-tools-install.sh
-./install.sh
-./vscode-tools-install.sh  # (optional)
-exec zsh  # or: source ~/.zshrc
-```
-
-Each script will ask for confirmation before installing any component — nothing is forced.
+Every component is optional — the installer asks before each one.
 
 ---
 
-## 🧹 Uninstallation
-
-To remove installed components:
+## 🧹 Uninstall
 
 ```bash
-cd TerminalBuild
-chmod +x uninstall.sh vscode-tools-uninstall.sh
-./uninstall.sh
-./vscode-tools-uninstall.sh  # (optional)
+cd TerminalBuild && chmod +x uninstall.sh && ./uninstall.sh
 ```
 
-Each component can be skipped individually during removal.
-
----
-
-## 📦 What's Included
-
-| Component | Description |
-|---|---|
-| **Oh My Zsh** | Zsh configuration framework |
-| **Powerlevel10k** | Fast and customizable Zsh theme |
-| **fzf** | Fuzzy file finder with preview |
-| **eza** | Modern replacement for `ls` with icons and git support |
-| **VS Code Extensions** | 30+ extensions for Python, C++, Docker, Remote SSH, and more |
+Clean removal with per-component confirmation.
 
 ---
 
@@ -74,18 +59,18 @@ Each component can be skipped individually during removal.
 
 ```
 TerminalBuild/
-├── install.sh                 # Terminal utilities installer
-├── uninstall.sh               # Terminal utilities uninstaller
-├── vscode-tools-install.sh    # VS Code + extensions installer
-├── vscode-tools-uninstall.sh  # VS Code + extensions uninstaller
-└── README.md                  # Documentation
+├── install.sh                 # Terminal setup (interactive)
+├── uninstall.sh               # Clean removal
+├── vscode-tools-install.sh    # VS Code extensions
+├── vscode-tools-uninstall.sh  # VS Code extensions removal
+└── README.md
 ```
 
 ---
 
-## 📋 Summary Output
+## 📋 Install Summary
 
-Both install and uninstall scripts display a summary table at the end:
+After running, you get a clear status report:
 
 ```
 ===========================================
@@ -94,12 +79,10 @@ Both install and uninstall scripts display a summary table at the end:
   COMPONENT            STATUS
   ────────────────────────────────────────
   git                  🔵 Already existed
-  curl                 🔵 Already existed
   zsh                  🟢 Installed
   oh-my-zsh            🟢 Installed
   powerlevel10k        🟢 Installed
   fzf                  🟢 Installed
-  build-essential      🔵 Already existed
   eza                  🟢 Installed
 ===========================================
 ```
@@ -108,13 +91,28 @@ Both install and uninstall scripts display a summary table at the end:
 
 ## 🗺️ Roadmap
 
-- [ ] Interactive GUI menu for selecting packages
+- [ ] Interactive TUI menu for selecting packages
 - [ ] Self-update via `git pull` and script restart
+- [ ] Fedora / Arch support
 
 ---
 
-## Author
+## 🤝 Contributing
 
-[**@melisha-git**](https://github.com/melisha-git)
+PRs and issues are welcome! If you have a favorite tool that should be included — open an issue.
 
-Pull Requests and Issues are welcome!
+---
+
+## 📄 License
+
+[MIT](LICENSE) — use it, fork it, make it yours.
+
+---
+
+<div align="center">
+
+**If this saved you time — ⭐ the repo!**
+
+Made by [@melisha-git](https://github.com/melisha-git)
+
+</div>
