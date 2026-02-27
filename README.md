@@ -8,9 +8,10 @@ TerminalBuild — это коллекция скриптов для быстро
 
 Перед установкой убедитесь, что выполнены следующие действия:
 
-1. Установите Zsh
+1. Выполнить
 ```
-sudo apt install zsh -y
+sudo apt update
+sudo apt install git -y
 ```
 
 2. (Опционально) Установите Visual Studio Code
