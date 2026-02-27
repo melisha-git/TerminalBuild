@@ -1,73 +1,120 @@
 # 🛠️ TerminalBuild
 
-TerminalBuild — это коллекция скриптов для быстрой настройки окружения терминала и редактора Visual Studio Code. Скрипты автоматически устанавливают/удаляют полезные утилиты, настраивают удобные бинды и делают работу в терминале более комфортной.
+TerminalBuild is a collection of scripts for quick terminal environment and Visual Studio Code setup. The scripts automatically install/remove useful utilities, configure convenient aliases, and make your terminal experience more comfortable.
 
 ---
 
-## Предварительные шаги
+## Prerequisites
 
-Перед установкой убедитесь, что выполнены следующие действия:
+Before installation, make sure you have the following:
 
-1. Выполнить
-```
+1. Update packages and install git:
+```bash
 sudo apt update
 sudo apt install git -y
 ```
 
-2. (Опционально) Установите Visual Studio Code
-```
+2. (Optional) Install Visual Studio Code:
+```bash
 sudo apt install code
 ```
+
+> **Note:** If you're running as root, VS Code commands require `--no-sandbox` flag. The scripts handle this automatically.
+
 ---
 
-## ⚙️ Установка и запуск
+## ⚙️ Installation
 
-1. Склонируйте репозиторий
-```
+1. Clone the repository:
+```bash
 git clone https://github.com/melisha-git/TerminalBuild.git
 ```
-2. Установите
-```
+
+2. Run the setup:
+```bash
 cd TerminalBuild
-chmod +x install.sh
+chmod +x install.sh vscode-tools-install.sh
 ./install.sh
-./vscode-tools-install.sh # (опционально)
-exec zsh #or source .zshrc
+./vscode-tools-install.sh  # (optional)
+exec zsh  # or: source ~/.zshrc
 ```
+
+Each script will ask for confirmation before installing any component — nothing is forced.
+
 ---
 
-## Удаление
+## 🧹 Uninstallation
 
-Для удаления установленных компонентов:
-```
+To remove installed components:
+
+```bash
 cd TerminalBuild
-chmod +x uninstall.sh
+chmod +x uninstall.sh vscode-tools-uninstall.sh
 ./uninstall.sh
-./vscode-tools-uninstall.sh # (опционально)
+./vscode-tools-uninstall.sh  # (optional)
 ```
+
+Each component can be skipped individually during removal.
+
 ---
 
-## Структура проекта
+## 📦 What's Included
+
+| Component | Description |
+|---|---|
+| **Oh My Zsh** | Zsh configuration framework |
+| **Powerlevel10k** | Fast and customizable Zsh theme |
+| **fzf** | Fuzzy file finder with preview |
+| **eza** | Modern replacement for `ls` with icons and git support |
+| **VS Code Extensions** | 30+ extensions for Python, C++, Docker, Remote SSH, and more |
+
+---
+
+## 📁 Project Structure
+
 ```
 TerminalBuild/
-├── install.sh                # Установка основных утилит
-├── vscode-tools-install.sh  # Установка расширений и настроек для VSCode
-├── vscode-tools-uninstall.sh# Удаление VSCode-настроек
-└── README.md                 # Документация проекта
+├── install.sh                 # Terminal utilities installer
+├── uninstall.sh               # Terminal utilities uninstaller
+├── vscode-tools-install.sh    # VS Code + extensions installer
+├── vscode-tools-uninstall.sh  # VS Code + extensions uninstaller
+└── README.md                  # Documentation
 ```
----
-
-## Планируемые улучшения (TODO)
-
-* [ ] GUI-меню выбора устанавливаемых пакетов
-* [ ] Обновление через git pull и перезапуск скриптов
 
 ---
 
-## Автор
+## 📋 Summary Output
 
-[@melisha-git](https://github.com/melisha-git)
+Both install and uninstall scripts display a summary table at the end:
 
-Pull Requests и Issues приветствуются!
+```
+===========================================
+  📋 Installation Summary
+===========================================
+  COMPONENT            STATUS
+  ────────────────────────────────────────
+  git                  🔵 Already existed
+  curl                 🔵 Already existed
+  zsh                  🟢 Installed
+  oh-my-zsh            🟢 Installed
+  powerlevel10k        🟢 Installed
+  fzf                  🟢 Installed
+  build-essential      🔵 Already existed
+  eza                  🟢 Installed
+===========================================
+```
 
 ---
+
+## 🗺️ Roadmap
+
+- [ ] Interactive GUI menu for selecting packages
+- [ ] Self-update via `git pull` and script restart
+
+---
+
+## Author
+
+[**@melisha-git**](https://github.com/melisha-git)
+
+Pull Requests and Issues are welcome!
