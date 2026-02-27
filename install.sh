@@ -1,68 +1,93 @@
 #!/bin/bash
 
 # =============================================
-# 🚀 Скрипт настройки терминала
+# 🚀 Terminal Setup Script
 # Oh My Zsh + Powerlevel10k + fzf + eza
 # =============================================
 
-# --- Определяем, нужен ли sudo ---
+# --- Status tracking ---
+declare -A STATUS
+
+mark_status() {
+  local name="$1"
+  local status="$2"
+  STATUS["$name"]="$status"
+}
+
+# --- Determine if sudo is needed ---
 if [ "$(id -u)" -eq 0 ]; then
   SUDO=""
 else
   if command -v sudo &>/dev/null; then
     SUDO="sudo"
   else
-    echo "⚠️  Нет sudo и вы не root. Установка пакетов может не сработать."
+    echo "⚠️  No sudo and not root. Package installation may fail."
     SUDO=""
   fi
 fi
 
-# --- Функция для установки пакета с подтверждением ---
+# --- Install a package with confirmation ---
 install_pkg() {
   local pkg="$1"
   if command -v "$pkg" &>/dev/null; then
-    echo "✅ $pkg уже установлен."
+    echo "✅ $pkg is already installed."
+    mark_status "$pkg" "already installed"
     return 0
   fi
-  read -rp "📦 $pkg не найден. Установить? [Y/n]: " answer
+  read -rp "📦 $pkg not found. Install? [Y/n]: " answer
   answer="${answer:-Y}"
   if [[ "$answer" =~ ^[Yy]$ ]]; then
-    $SUDO apt install "$pkg" -y -qq
+    if $SUDO apt install "$pkg" -y -qq; then
+      mark_status "$pkg" "installed"
+    else
+      mark_status "$pkg" "failed"
+    fi
   else
-    echo "⏭️  Пропускаем $pkg."
+    echo "⏭️  Skipping $pkg."
+    mark_status "$pkg" "skipped"
     return 1
   fi
 }
 
-# --- Функция для установки eza через cargo/rustup ---
+# --- Install eza via cargo/rustup ---
 install_eza() {
   if command -v eza &>/dev/null; then
-    echo "✅ eza уже установлена."
+    echo "✅ eza is already installed."
+    mark_status "eza" "already installed"
     return 0
   fi
 
-  read -rp "📦 eza не найдена. Установить через cargo? [Y/n]: " answer
+  read -rp "📦 eza not found. Install via cargo? [Y/n]: " answer
   answer="${answer:-Y}"
   if [[ ! "$answer" =~ ^[Yy]$ ]]; then
-    echo "⏭️  Пропускаем eza."
+    echo "⏭️  Skipping eza."
+    mark_status "eza" "skipped"
     return 1
   fi
 
-  # Проверяем наличие cargo, если нет — ставим rustup
+  # Install rustup if cargo is missing
   if ! command -v cargo &>/dev/null; then
-    echo "🦀 cargo не найден. Устанавливаем Rust через rustup..."
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-    source "$HOME/.cargo/env"
+    echo "🦀 cargo not found. Installing Rust via rustup..."
+    if curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y; then
+      source "$HOME/.cargo/env"
+    else
+      mark_status "eza" "failed"
+      return 1
+    fi
   fi
 
-  echo "⚙️  Собираем eza через cargo (это может занять пару минут)..."
-  cargo install eza
+  echo "⚙️  Building eza via cargo (this may take a couple of minutes)..."
+  if cargo install eza; then
+    mark_status "eza" "installed"
+  else
+    mark_status "eza" "failed"
+  fi
 }
 
 # =============================================
-# 1. Базовые пакеты
+# 1. Base packages
 # =============================================
-echo "🚀 Начинаем настройку терминала..."
+echo "🚀 Starting terminal setup..."
 echo ""
 
 install_pkg git
@@ -76,10 +101,15 @@ echo ""
 echo "🔧 Oh My Zsh..."
 
 if [ -d "$HOME/.oh-my-zsh" ]; then
-  echo "✅ Oh My Zsh уже установлен."
+  echo "✅ Oh My Zsh is already installed."
+  mark_status "oh-my-zsh" "already installed"
 else
-  echo "⬇️ Устанавливаем Oh My Zsh..."
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+  echo "⬇️ Installing Oh My Zsh..."
+  if sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended; then
+    mark_status "oh-my-zsh" "installed"
+  else
+    mark_status "oh-my-zsh" "failed"
+  fi
 fi
 
 # =============================================
@@ -89,17 +119,22 @@ echo ""
 echo "🎨 Powerlevel10k..."
 
 if [ -d "$HOME/powerlevel10k" ]; then
-  echo "✅ Powerlevel10k уже загружена."
+  echo "✅ Powerlevel10k is already downloaded."
+  mark_status "powerlevel10k" "already installed"
 else
-  echo "⬇️ Загружаем тему Powerlevel10k..."
-  git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$HOME/powerlevel10k"
+  echo "⬇️ Downloading Powerlevel10k theme..."
+  if git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$HOME/powerlevel10k"; then
+    mark_status "powerlevel10k" "installed"
+  else
+    mark_status "powerlevel10k" "failed"
+  fi
 fi
 
 if ! grep -Fxq "source ~/powerlevel10k/powerlevel10k.zsh-theme" "$HOME/.zshrc"; then
-  echo "➕ Добавляем Powerlevel10k в ~/.zshrc"
+  echo "➕ Adding Powerlevel10k to ~/.zshrc"
   echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >> "$HOME/.zshrc"
 else
-  echo "ℹ️  Powerlevel10k уже в ~/.zshrc"
+  echo "ℹ️  Powerlevel10k is already in ~/.zshrc"
 fi
 
 # =============================================
@@ -109,30 +144,36 @@ echo ""
 echo "🔍 fzf..."
 
 if [ -d "$HOME/.fzf" ]; then
-  echo "✅ fzf уже загружен."
+  echo "✅ fzf is already downloaded."
 else
-  echo "⬇️ Загружаем fzf..."
+  echo "⬇️ Downloading fzf..."
   git clone --depth 1 https://github.com/junegunn/fzf.git "$HOME/.fzf"
 fi
 
 if [ -f "$HOME/.fzf.zsh" ]; then
-  echo "✅ fzf уже установлен."
+  echo "✅ fzf is already installed."
+  mark_status "fzf" "already installed"
 else
-  echo "⚙️  Устанавливаем fzf..."
-  "$HOME/.fzf/install" --all
+  echo "⚙️  Installing fzf..."
+  if "$HOME/.fzf/install" --all; then
+    mark_status "fzf" "installed"
+  else
+    mark_status "fzf" "failed"
+  fi
 fi
 
 if ! grep -q 'alias ff=' "$HOME/.zshrc"; then
-  echo "➕ Добавляем алиас ff в ~/.zshrc"
+  echo "➕ Adding ff alias to ~/.zshrc"
   echo 'alias ff="fzf --style full --preview '\''fzf-preview.sh {}'\'' --bind '\''focus:transform-header:file --brief {}'\''"' >> "$HOME/.zshrc"
 fi
 
 # =============================================
-# 5. eza
+# 5. eza (requires build tools and cargo)
 # =============================================
 echo ""
 echo "📂 eza..."
 
+install_pkg build-essential
 install_eza
 
 if ! grep -q 'alias ls="eza' "$HOME/.zshrc"; then
@@ -149,12 +190,33 @@ alias lx="eza -lbhHigUmuSa@"
 alias lt="eza --tree $eza_params"
 alias tree="eza --tree $eza_params"
 EOF
-  echo "✅ Алиасы eza добавлены в ~/.zshrc"
+  echo "✅ eza aliases added to ~/.zshrc"
 else
-  echo "ℹ️  Алиасы eza уже в ~/.zshrc"
+  echo "ℹ️  eza aliases are already in ~/.zshrc"
 fi
 
 # =============================================
+# Summary
+# =============================================
 echo ""
-echo "✅ Установка завершена! Всё готово к работе 🎉"
-echo "💡 Выполните: source ~/.zshrc  (или перезапустите терминал)"
+echo "==========================================="
+echo "  📋 Installation Summary"
+echo "==========================================="
+printf "  %-20s %s\n" "COMPONENT" "STATUS"
+echo "  ────────────────────────────────────────"
+
+for name in git curl zsh oh-my-zsh powerlevel10k fzf build-essential eza; do
+  st="${STATUS[$name]:-unknown}"
+  case "$st" in
+    "installed")         icon="🟢 Installed"       ;;
+    "already installed") icon="🔵 Already existed"  ;;
+    "skipped")           icon="🟡 Skipped"          ;;
+    "failed")            icon="🔴 Failed"           ;;
+    *)                   icon="⚪ Unknown"          ;;
+  esac
+  printf "  %-20s %s\n" "$name" "$icon"
+done
+
+echo "==========================================="
+echo ""
+echo "💡 Run: zsh; source ~/.zshrc  (or restart your terminal)"
