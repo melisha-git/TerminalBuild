@@ -113,31 +113,6 @@ else
 fi
 
 # =============================================
-# 3. Powerlevel10k
-# =============================================
-echo ""
-echo "🎨 Powerlevel10k..."
-
-if [ -d "$HOME/powerlevel10k" ]; then
-  echo "✅ Powerlevel10k is already downloaded."
-  mark_status "powerlevel10k" "already installed"
-else
-  echo "⬇️ Downloading Powerlevel10k theme..."
-  if git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$HOME/powerlevel10k"; then
-    mark_status "powerlevel10k" "installed"
-  else
-    mark_status "powerlevel10k" "failed"
-  fi
-fi
-
-if ! grep -Fxq "source ~/powerlevel10k/powerlevel10k.zsh-theme" "$HOME/.zshrc"; then
-  echo "➕ Adding Powerlevel10k to ~/.zshrc"
-  echo 'source ~/powerlevel10k/powerlevel10k.zsh-theme' >> "$HOME/.zshrc"
-else
-  echo "ℹ️  Powerlevel10k is already in ~/.zshrc"
-fi
-
-# =============================================
 # 4. fzf
 # =============================================
 echo ""
@@ -180,7 +155,7 @@ if ! grep -q 'alias ls="eza' "$HOME/.zshrc"; then
   cat >> "$HOME/.zshrc" << 'EOF'
 
 # --- eza aliases ---
-eza_params="--icons --group-directories-first"
+eza_params="--icons=never"
 alias ls="eza $eza_params"
 alias l="eza --git-ignore $eza_params"
 alias ll="eza --all --header --long $eza_params"
@@ -223,7 +198,7 @@ echo "==========================================="
 printf "  %-20s %s\n" "COMPONENT" "STATUS"
 echo "  ────────────────────────────────────────"
 
-for name in git curl zsh oh-my-zsh powerlevel10k fzf build-essential eza; do
+for name in git curl zsh oh-my-zsh fzf build-essential eza; do
   st="${STATUS[$name]:-unknown}"
   case "$st" in
     "installed")         icon="🟢 Installed"       ;;
